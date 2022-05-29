@@ -22,11 +22,17 @@ const seek = (path) => {
     return [hit, meta, data]
 }
 
+const save = (trace) => {
+    console.log(trace)
+}
+
 const look = async (path) => {
     let [hit, meta, data] = seek(path)
     if (!hit) {
         const dmap = await rpc.getFacade(config_URL_todo);
-        ({meta, data} = await lib.walk(dmap, path))
+        const trace = await lib.walk2(dmap, path);
+        [meta, data] = trace.slice(-1)
+        save(trace)
     }
     console.log(meta, data)
 }
