@@ -1,5 +1,8 @@
 const { Command } = require('commander');
+const lib = require('./lib/dmap/dmap.js')
+const rpc = require('./rpc.js')
 const program = new Command();
+const config_URL_todo = 'https://mainnet.infura.io/v3/c0a739d64257448f855847c6e3d173e1'
 
 program
     .name('dmap')
@@ -13,8 +16,19 @@ program.command('walk')
         look(dpath)
     });
 
-const look = async (dpath) => {
-    console.log(dpath)
+const seek = (path) => {
+    let hit = false
+    let meta, data
+    return [hit, meta, data]
+}
+
+const look = async (path) => {
+    let [hit, meta, data] = seek(path)
+    if (!hit) {
+        const dmap = await rpc.getFacade(config_URL_todo);
+        ({meta, data} = await lib.walk(dmap, path))
+    }
+    console.log(meta, data)
 }
 
 program.parse();
