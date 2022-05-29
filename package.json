@@ -1,0 +1,10 @@
+{
+  "name": "locktopus",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npx mocha test"
+  },
+  "dependencies": {
+    "commander": "^9.3.0"
+  }
+}
