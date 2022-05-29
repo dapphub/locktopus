@@ -1,6 +1,6 @@
 {
   "name": "locktopus",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "scripts": {
     "initialize": "npm i && npm run download-submodules && npm run install-submodules",
     "download-submodules": "git submodule update --init --recursive --remote",
