@@ -1,18 +1,20 @@
 import { Command } from 'commander'
 import  lib  from './lib/dmap/dmap.js'
-import  { rpc }   from './rpc.js'
+import { rpc }  from './rpc.js'
 import { jams } from './lib/jams/jams.js'
 import { readFileSync } from 'fs'
+import os from  'os'
 const program = new Command();
-
-// TODO: DMFXYZ Should move this to a config provider that defaults to home directory
-// and allows optional flag for custom config path
-const config = jams(readFileSync("./config.jams", {encoding: 'utf-8'}))
+let config = {}
 
 program
     .name('dmap')
     .description('dmap interface tools')
-    .version('0.1.0');
+    .version('0.1.0')
+    .option('-c, --config-file <string>', 'path to your jams config file', `${os.homedir()}/.locktopus/config.jams`)
+    .hook('preAction', (_, __) => {
+        config = jams(readFileSync(program.opts().configFile, {encoding: 'utf-8'}))
+    });
 
 program.command('walk')
     .description('Read a value from a dpath with caching')
