@@ -38,7 +38,9 @@ const look = async (path) => {
     if (!hit) {
         const dmap = await rpc.getFacade(config.eth_rpc);
         const trace = await lib.walk2(dmap, path);
-        [meta, data] = trace.slice(-1)
+        const slice = trace.slice(-1)[0];
+        meta = slice['0']
+        data = slice['1']
         save(trace)
     }
     console.log(meta, data)
