@@ -6,6 +6,7 @@ import { readFileSync } from 'fs'
 import os from  'os'
 const program = new Command();
 let config = {}
+const LOCK = '1'
 
 program
     .name('dmap')
@@ -39,7 +40,10 @@ const look = async (path) => {
         const dmap = await rpc.getFacade(config.eth_rpc);
         const trace = await lib.walk2(dmap, path);
         [meta, data] = Object.values(trace.slice(-1)[0]);
-        save(trace)
+        // only save if lock bit is set
+        if (meta.slice(-1) == LOCK) {
+            save(trace)
+        }
     }
     console.log(meta, data)
 }
