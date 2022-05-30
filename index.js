@@ -1,8 +1,13 @@
-const { Command } = require('commander');
-const lib = require('./lib/dmap/dmap.js')
-const rpc = require('./rpc.js')
+import { Command } from 'commander'
+import  lib  from './lib/dmap/dmap.js'
+import  { rpc }   from './rpc.js'
+import { jams } from './lib/jams/jams.js'
+import { readFileSync } from 'fs'
 const program = new Command();
-const config_URL_todo = 'https://mainnet.infura.io/v3/c0a739d64257448f855847c6e3d173e1'
+
+// TODO: DMFXYZ Should move this to a config provider that defaults to home directory
+// and allows optional flag for custom config path
+const config = jams(readFileSync("./config.jams", {encoding: 'utf-8'}))
 
 program
     .name('dmap')
@@ -29,7 +34,7 @@ const save = (trace) => {
 const look = async (path) => {
     let [hit, meta, data] = seek(path)
     if (!hit) {
-        const dmap = await rpc.getFacade(config_URL_todo);
+        const dmap = await rpc.getFacade(config.eth_rpc);
         const trace = await lib.walk2(dmap, path);
         [meta, data] = trace.slice(-1)
         save(trace)

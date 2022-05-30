@@ -1,3 +1,6 @@
 [submodule "lib/dmap"]
 	path = lib/dmap
 	url = https://github.com/dapphub/dmap.git
+[submodule "lib/jams"]
+	path = lib/jams
+	url = git@github.com:nmushegian/jams.git

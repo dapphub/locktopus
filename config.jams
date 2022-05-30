@@ -1,0 +1,4 @@
+{
+    eth_rpc https://mainnet.infura.io/v3/c0a739d64257448f855847c6e3d173e1
+    finality 60
+}
