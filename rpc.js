@@ -18,6 +18,7 @@ rpc.makeRPC = async (url, method, params) => {
                 "id": 0
             }),
         });
+        console.log(await response);
         ({result} = await response.json())
     }
     catch (err) {}
@@ -35,4 +36,10 @@ rpc.getFacade = async (url) => {
     return { provider: { getStorageAt:storageFunction },
         address: lib.address
     }
+}
+
+// Default to the block that dmap was deployed
+rpc.getPastEvents = async(url, address, fromBlock=14691764, toBlock='latest') => {
+    console.log("!!!!!!!!!!!!!")
+    return await rpc.makeRPC(url, "eth_getLogs", [{address: address, fromBlock: fromBlock, toBlock: toBlock}])
 }
