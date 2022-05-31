@@ -1,9 +1,9 @@
 import { Command } from 'commander'
 import  lib  from './lib/dmap/dmap.js'
 import { rpc }  from './rpc.js'
-import { jams } from "jams.js"
+import { jams } from 'jams.js'
 import { readFileSync } from 'fs'
-import os from  'os'
+import os from 'os'
 const program = new Command();
 let config = {}
 
@@ -38,7 +38,7 @@ const look = async (path) => {
     if (!hit) {
         const dmap = await rpc.getFacade(config.eth_rpc);
         const trace = await lib.walk2(dmap, path);
-        [meta, data] = trace.slice(-1)
+        [meta, data] = trace.slice(-1)[0];
         save(trace)
     }
     console.log(meta, data)
