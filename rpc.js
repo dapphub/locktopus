@@ -1,7 +1,7 @@
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const lib = require("./lib/dmap/dmap")
+import fetch from "node-fetch"
+import lib from "./lib/dmap/dmap.js"
 
-module.exports = rpc = {}
+export let rpc = {}
 
 rpc.makeRPC = async (url, method, params) => {
     let result = null

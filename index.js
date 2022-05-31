@@ -1,13 +1,20 @@
-const { Command } = require('commander');
-const lib = require('./lib/dmap/dmap.js')
-const rpc = require('./rpc.js')
+import { Command } from 'commander'
+import  lib  from './lib/dmap/dmap.js'
+import { rpc }  from './rpc.js'
+import { jams } from "jams.js"
+import { readFileSync } from 'fs'
+import os from  'os'
 const program = new Command();
-const config_URL_todo = 'https://mainnet.infura.io/v3/c0a739d64257448f855847c6e3d173e1'
+let config = {}
 
 program
     .name('dmap')
     .description('dmap interface tools')
-    .version('0.1.0');
+    .version('0.1.0')
+    .option('-c, --config-file <string>', 'path to your jams config file', `${os.homedir()}/.locktopus/config.jams`)
+    .hook('preAction', (_, __) => {
+        config = jams(readFileSync(program.opts().configFile, {encoding: 'utf-8'}))
+    });
 
 program.command('walk')
     .description('Read a value from a dpath with caching')
@@ -29,7 +36,7 @@ const save = (trace) => {
 const look = async (path) => {
     let [hit, meta, data] = seek(path)
     if (!hit) {
-        const dmap = await rpc.getFacade(config_URL_todo);
+        const dmap = await rpc.getFacade(config.eth_rpc);
         const trace = await lib.walk2(dmap, path);
         [meta, data] = trace.slice(-1)
         save(trace)

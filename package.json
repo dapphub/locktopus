@@ -1,6 +1,7 @@
 {
   "name": "locktopus",
   "version": "0.1.0",
+  "type": "module",
   "scripts": {
     "initialize": "npm i && npm run download-submodules && npm run install-submodules",
     "download-submodules": "git submodule update --init --recursive --remote",
@@ -11,6 +12,7 @@
   },
   "dependencies": {
     "commander": "^9.3.0",
+    "jams.js": "^0.0.7",
     "node-fetch": "^3.2.4"
   }
 }
