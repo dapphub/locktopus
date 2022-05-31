@@ -2,11 +2,12 @@
 
 ## Core term
 
-`[ when zone name meta data ]`
+`[ when zone name path meta data ]`
 
 - `when`: time entry was locked in the dmap (last event block time)
 - `zone`: dmap namezone
 - `name`: the key that was set
+- `path`: the dpath
 - `meta`: the metadata, bit 0 is lock flag
 - `data`: the data
 
