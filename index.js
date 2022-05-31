@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import  lib  from './lib/dmap/dmap.js'
 import { rpc }  from './rpc.js'
-import { jams } from './lib/jams/jams.js'
+import { jams } from "jams.js"
 import { readFileSync } from 'fs'
 import os from  'os'
 const program = new Command();
