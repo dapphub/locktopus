@@ -21,10 +21,10 @@ program
     .name('dmap')
     .description('dmap interface tools')
     .version('0.1.0')
-    .option('-c, --config-file <string>', 'path to your jams config file',
-            `${dir}/config.jams`)
+    .option('-c, --config-dir <string>', 'path to your jams config file',
+            dir)
     .hook('preAction', (_, __) => {
-        config = jams(readFileSync(program.opts().configFile, {encoding: 'utf-8'}))
+        config = jams(readFileSync(`${program.opts().configDir}/config.jams`, {encoding: 'utf-8'}))
     });
 
 program.command('walk')
