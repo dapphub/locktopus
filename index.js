@@ -76,7 +76,7 @@ const look = async (path) => {
             null
         ]);
         events.sort((e1, e2) => {
-            return BigInt(e1.blockNumber) - BigInt(e2.blockNumber)
+            return parseInt(e1.blockNumber) - parseInt(e2.blockNumber)
         })
         const block = await rpc.getBlock(config.eth_rpc, events.reverse()[0].blockNumber)
         when = parseInt(block.timestamp)

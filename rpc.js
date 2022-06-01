@@ -39,6 +39,7 @@ rpc.getFacade = async (url) => {
     }
 }
 
+// Default fromBlock to the block that the  dmap object was deployed
 rpc.getPastEvents = async(url, address, topics, fromBlock='0xe02db4', toBlock='latest') => {
     return await rpc.makeRPC(url, "eth_getLogs", [{address: address, 
         fromBlock: fromBlock, 
