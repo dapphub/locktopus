@@ -7,24 +7,19 @@ import { jams } from 'jams.js'
 import { existsSync, mkdirSync, readFileSync } from 'fs'
 import os from 'os'
 
-let config = {}
-const program = new Command();
-
-const dir = `${os.homedir()}/.locktopus`
-if (!existsSync(dir)) mkdirSync(dir)
-const db = new Database(`${dir}/locktopus.sqlite`, { verbose: console.log })
-const create = db.prepare("CREATE TABLE IF NOT EXISTS locks(" +
-    "'when' INTEGER, 'zone' TEXT, 'name' TEXT,'path' TEXT PRIMARY KEY, 'meta' TEXT, 'data' TEXT )")
-create.run();
+let config
+let db
+const program = new Command()
 
 program
     .name('dmap')
     .description('dmap interface tools')
     .version('0.1.0')
-    .option('-c, --config-dir <string>', 'path to your jams config file',
-            dir)
+    .option('-d, --dir <string>', 'path to locktopus database and config file',
+            `${os.homedir()}/.locktopus`)
     .hook('preAction', (_, __) => {
-        config = jams(readFileSync(`${program.opts().configDir}/config.jams`, {encoding: 'utf-8'}))
+        config = jams(readFileSync(`${program.opts().dir}/config.jams`, {encoding: 'utf-8'}))
+        init_db(program.opts().dir)
     });
 
 program.command('walk')
@@ -33,6 +28,14 @@ program.command('walk')
     .action((dpath) => {
         look(dpath)
     });
+
+const init_db = (dir) => {
+    if (!existsSync(dir)) mkdirSync(dir)
+    db = new Database(`${dir}/locktopus.sqlite`, { verbose: console.log })
+    const create = db.prepare("CREATE TABLE IF NOT EXISTS locks(" +
+        "'when' INTEGER, 'zone' TEXT, 'name' TEXT,'path' TEXT PRIMARY KEY, 'meta' TEXT, 'data' TEXT )")
+    create.run();
+}
 
 const seek = (path) => {
     let miss = true
