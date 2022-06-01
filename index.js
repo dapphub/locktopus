@@ -61,36 +61,22 @@ const save = (meta, data, trace, path, when) => {
 const look = async (path) => {
     let [miss, meta, data] = seek(path)
     if (miss) {
-        let when = 0
         const dmap = await rpc.getFacade(config.eth_rpc)
         const trace = await lib.walk2(dmap, path);
         [meta, data] = trace.slice(-1)[0];
         const [, stored_zone ] = trace.slice(-2)[0]
         const zone = '0x' + '00'.repeat(12) + stored_zone.slice(2, 42);
-        const path_name = _getNameFromPath(path);
+        const path_name = path.split(/[:.]/).slice(-1)[0]
         const name = '0x' + lib._strToHex(path_name) + '0'.repeat(64 - path_name.length * 2);
-        let events = await rpc.getPastEvents(config.eth_rpc, lib.address,[
-            zone,
-            name,
-            null,
-            null
-        ]);
+        let events = await rpc.getPastEvents(config.eth_rpc, lib.address,[zone, name, null, null]);
         events.sort((e1, e2) => {
             return parseInt(e1.blockNumber) - parseInt(e2.blockNumber)
         })
         const block = await rpc.getBlock(config.eth_rpc, events.reverse()[0].blockNumber)
-        when = parseInt(block.timestamp)
+        const when = parseInt(block.timestamp)
         save(meta, data, trace, path, when)
     }
     console.log(`meta: ${meta}\ndata: ${data}`)
-}
-
-function _getNameFromPath(path) {
-    if(path.lastIndexOf(".") > path.lastIndexOf(':')) {
-        return path.substring(path.lastIndexOf('.') + 1)
-    } else {
-        return path.substring(path.lastIndexOf(':') + 1)
-    }
 }
 
 process.on('exit', () => db.close())
