@@ -18,9 +18,11 @@ rpc.makeRPC = async (url, method, params) => {
                 "id": 0
             }),
         });
-        ({result} = await response.json())
+        ({ result } = await response.json());
     }
-    catch (err) {}
+    catch (err) {
+        throw err
+    }
     return result
 }
 
@@ -35,4 +37,16 @@ rpc.getFacade = async (url) => {
     return { provider: { getStorageAt:storageFunction },
              address : lib.address
     }
+}
+
+rpc.getPastEvents = async(url, address, topics, fromBlock='0xe02db4', toBlock='latest') => {
+    return await rpc.makeRPC(url, "eth_getLogs", [{address: address, 
+        fromBlock: fromBlock, 
+        toBlock: toBlock,
+        topics: topics
+    }])
+}
+
+rpc.getBlock = async(url, block) => {
+    return await rpc.makeRPC(url, "eth_getBlockByNumber", [block, false])
 }
