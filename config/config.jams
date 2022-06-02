@@ -1,4 +1,4 @@
 {
-    eth_rpc https://mainnet.infura.io/v3/c0a739d64257448f855847c6e3d173e1
+    eth_rpc http://127.0.0.1:8545
     finality 60
 }
