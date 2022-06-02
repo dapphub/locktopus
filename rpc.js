@@ -27,8 +27,7 @@ rpc.makeRPC = async (url, method, params) => {
 }
 
 rpc.RPCGetStorage = async (url, address, slot) => {
-    const block = await rpc.makeRPC(url, "eth_blockNumber", [])
-    return await rpc.makeRPC(url, "eth_getStorageAt", [address, slot, block])
+    return await rpc.makeRPC(url, "eth_getStorageAt", [address, slot, "latest"])
 }
 
 rpc.getFacade = async (url) => {
