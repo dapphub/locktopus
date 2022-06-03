@@ -75,10 +75,10 @@ const monk_get = async (db, orig, dmap, slot) => {
 const save = async (trace, path) => {
     if ( path.length > 0 && ![':', '.'].includes(path.charAt(0))) path = ':' + path
     const names = path.split(/[:.]/)
-    for (const i in lots) {
+    for (const [i, slot] of lots.entries()) {
         const [meta, data] = trace[i]
         if ((lib._hexToArrayBuffer(meta)[31] & lib.FLAG_LOCK) === 0) return
-        if (!lots[i][save_idx]) continue
+        if (!slot[save_idx]) continue
 
         const stored_zone = i === 0 ? lib.address : trace[i - 1][1]
         const zone = '0x' + '00'.repeat(12) + stored_zone.slice(2, 42)
@@ -93,7 +93,7 @@ const save = async (trace, path) => {
 
         if (last - when < config.finality) return
         const insert = db.prepare('INSERT INTO locks VALUES (@when, @slot, @zone, @name, @meta, @data)')
-        insert.run({when: when, slot: lots[i][slot_idx], zone: zone, name: name, meta: meta, data: data})
+        insert.run({when: when, slot: slot[slot_idx], zone: zone, name: name, meta: meta, data: data})
     }
 }
 
