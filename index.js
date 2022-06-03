@@ -2,7 +2,7 @@ import process from 'node:process'
 import { Command } from 'commander'
 import { jams } from 'jams.js'
 import { readFileSync } from 'fs'
-import { locktopus, db } from './locktopus.js'
+import { locktopus } from './locktopus.js'
 import os from 'os'
 import { fileURLToPath } from "url";
 
@@ -29,7 +29,8 @@ program
         locktopus.look(dpath)
     });
 
-process.on('exit', () => db.close())
+process.on('exit', () => locktopus.close())
+// Only run if called as main program
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
     program.parse();
 }

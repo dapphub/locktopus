@@ -4,7 +4,7 @@ import { rpc }  from './rpc.js'
 import { existsSync, mkdirSync, readFileSync } from 'fs'
 
 let   config
-export let   db
+let   db
 let   last
 const lots = []
 const slot_idx = 0
@@ -78,3 +78,8 @@ locktopus.save = async (trace, path) => {
         insert.run({when: when, slot: slot[slot_idx], zone: zone, name: name, meta: meta, data: data})
     }
 }
+
+locktopus.close = () => {
+    db.close()
+}
+
