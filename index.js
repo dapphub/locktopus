@@ -1,11 +1,12 @@
+import os from 'os'
 import process from 'node:process'
+import { fileURLToPath } from "url";
+import { readFileSync } from 'fs'
+
 import { Command } from 'commander'
 import { jams } from 'jams.js'
-import { readFileSync } from 'fs'
-import { locktopus } from './locktopus.js'
-import os from 'os'
-import { fileURLToPath } from "url";
 
+import { locktopus } from './locktopus.js'
 
 const program = new Command()
 

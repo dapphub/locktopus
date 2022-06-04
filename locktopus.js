@@ -1,7 +1,9 @@
+import { existsSync, mkdirSync } from 'fs'
+
 import Database from 'better-sqlite3'
+
 import lib from './lib/dmap/dmap.js'
 import { rpc }  from './rpc.js'
-import { existsSync, mkdirSync, readFileSync } from 'fs'
 
 let   config
 let   db
@@ -45,7 +47,7 @@ locktopus.monk_get = async (db, orig, dmap, slot) => {
     const lock = stmt.get(slot)
     lots.push([slot, lock === undefined])
     if (lock === undefined) {
-        if (last === undefined) locktopus.init_last();
+        if (last === undefined) await locktopus.init_last();
         [meta, data] = await orig(dmap, slot)
     } else {
         meta = lock.meta
@@ -82,4 +84,3 @@ locktopus.save = async (trace, path) => {
 locktopus.close = () => {
     db.close()
 }
-
