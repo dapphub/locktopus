@@ -57,26 +57,35 @@ locktopus.monk_get = async (db, orig, dmap, slot) => {
 }
 
 locktopus.save = async (trace, path) => {
-    if ( path.length > 0 && ![':', '.'].includes(path.charAt(0))) path = ':' + path
+    const skipped = ![':', '.'].includes(path.charAt(0))
+    const add_rune = path.length > 0 && skipped
+    if (add_rune) path = ':' + path
     const names = path.split(/[:.]/)
     for (const [i, slot] of lots.entries()) {
         const [meta, data] = trace[i]
-        if ((lib._hexToArrayBuffer(meta)[31] & lib.FLAG_LOCK) === 0) return
+        const lock_byte = lib._hexToArrayBuffer(meta)[31]
+        if ((lock_byte & lib.FLAG_LOCK) === 0) return
         if (!slot[save_idx]) continue
 
         const stored_zone = i === 0 ? lib.address : trace[i - 1][1]
         const zone = '0x' + '00'.repeat(12) + stored_zone.slice(2, 42)
-        const name = '0x' + lib._strToHex(names[i]) + '00'.repeat(32 - names[i].length)
+        const hex_name = lib._strToHex(names[i])
+        const fill = 64 - hex_name.length
+        const name = '0x' + hex_name + '0'.repeat(fill)
         let when = 0
         if (i > 0) {
-            let events = await rpc.getPastEvents(config.eth_rpc, lib.address, [zone, name, null, null])
-            events.sort((e1, e2) => { return parseInt(e1.blockNumber) - parseInt(e2.blockNumber) })
-            const block = await rpc.getBlock(config.eth_rpc, events.reverse()[0].blockNumber)
+            const topics = [zone, name, null, null]
+            let events = await rpc.getPastEvents(config.eth_rpc, lib.address, topics)
+            const blocknum = event => parseInt(event.blockNumber)
+            events.sort((e1, e2) => blocknum(e2) - blocknum(e1))
+            const block = await rpc.getBlock(config.eth_rpc, events[0].blockNumber)
             when = parseInt(block.timestamp)
         }
 
-        if (last - when < config.finality) return
-        const insert = db.prepare('INSERT INTO locks VALUES (@when, @slot, @zone, @name, @meta, @data)')
+        const event_age = last - when
+        if (event_age < config.finality) return
+        const sql_str = 'INSERT INTO locks VALUES (@when, @slot, @zone, @name, @meta, @data)'
+        const insert = db.prepare(sql_str)
         insert.run({when: when, slot: slot[slot_idx], zone: zone, name: name, meta: meta, data: data})
     }
 }
