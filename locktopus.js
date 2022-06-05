@@ -82,7 +82,7 @@ locktopus.save = async (trace, path) => {
             when = parseInt(block.timestamp)
         }
 
-        let event_age = last - when
+        const event_age = last - when
         if (event_age < config.finality) return
         const sql_str = 'INSERT INTO locks VALUES (@when, @slot, @zone, @name, @meta, @data)'
         const insert = db.prepare(sql_str)
