@@ -8,7 +8,6 @@ import Database from 'better-sqlite3/lib/database'
 
 rpc.makeRPC = jest.fn()
 const original_get = lib.get
-const original_walk2 = lib.walk2
 
 beforeEach(() => {
     locktopus.set_config({'eth_rpc': dummy_url, 'finality': '60'})
@@ -18,13 +17,11 @@ beforeEach(() => {
 
 afterEach(() => {
     lib.get = original_get
-    lib.walk2 = original_walk2
     rpc.makeRPC.mockReset()
-    return Promise.all([locktopus.close(),  fs.promises.rmdir('./testdb', {recursive: true, force: true})])
+    return Promise.all([locktopus.close(), fs.promises.rmdir('./testdb', {recursive: true, force: true})])
 })
 
 test('test init last', async () => {
-    //await locktopus.init_db('./testdb')
     rpc.makeRPC.mockReturnValueOnce({"timestamp": '1'})
     const getBlock = jest.spyOn(rpc, 'getBlock')
     await locktopus.init_last()
@@ -36,13 +33,12 @@ test('test init last', async () => {
     )
 })
 
-
 test('test look', async () => {
     // Setup mock blocks, traces, and events
-    const mock_blocks = jest.fn().mockReturnValueOnce({timestamp: '0x629ce77e'}).mockReturnValueOnce({timetsamp: '0x626e72ea'})
+    const mock_blocks = jest.fn().mockReturnValueOnce({timestamp: '0x629ce77e'}).mockReturnValueOnce({timestamp: '0x626e72ea'})
     const mock_get = jest.fn().mockReturnValueOnce(dummy_trace[0])
-    .mockReturnValueOnce(dummy_trace[1])
-    .mockReturnValueOnce(dummy_trace[2])
+                              .mockReturnValueOnce(dummy_trace[1])
+                              .mockReturnValueOnce(dummy_trace[2])
     const mock_events = jest.fn().mockReturnValue(dummy_events)
 
     // Set mocks and re-init db and re-init last
@@ -69,4 +65,3 @@ test('test look', async () => {
     expect(free_entry.meta).toBe(dummy_trace[1][0])
     expect(free_entry.data).toBe(dummy_trace[1][1])
 })
-

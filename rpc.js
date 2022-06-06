@@ -18,9 +18,8 @@ rpc.makeRPC = async (url, method, params) => {
                 "id": 0
             }),
         });
-        ({ result } = await response.json());
-    }
-    catch (err) {
+        ({ result } = await response.json())
+    } catch (err) {
         throw err
     }
     return result
@@ -33,21 +32,23 @@ rpc.RPCGetStorage = async (url, address, slot) => {
 rpc.getFacade = async (url) => {
     const storageFunction = rpc.RPCGetStorage.bind(null, url)
 
-    return { provider: { getStorageAt:storageFunction },
-             address : lib.address
+    return {
+        provider: { getStorageAt: storageFunction },
+        address: lib.address
     }
 }
 
 // Default fromBlock to the block that the dmap object was deployed
 // Will not work with light clients
-rpc.getPastEvents = async(url, address, topics, fromBlock='0xe02db4', toBlock='latest') => {
-    return await rpc.makeRPC(url, "eth_getLogs", [{address: address, 
-        fromBlock: fromBlock, 
+rpc.getPastEvents = async (url, address, topics, fromBlock = '0xe02db4', toBlock = 'latest') => {
+    return await rpc.makeRPC(url, "eth_getLogs", [{
+        address: address,
+        fromBlock: fromBlock,
         toBlock: toBlock,
         topics: topics
     }])
 }
 
-rpc.getBlock = async(url, block) => {
+rpc.getBlock = async (url, block) => {
     return await rpc.makeRPC(url, "eth_getBlockByNumber", [block, false])
 }
