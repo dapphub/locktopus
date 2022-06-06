@@ -6,12 +6,19 @@
     "initialize": "npm i && npm run download-submodules && npm run install-submodules",
     "download-submodules": "git submodule update --init --recursive --remote",
     "install-submodules": "npm run init:dmap",
-    "init:dmap": "cd lib/dmap && npm i"
+    "init:dmap": "cd lib/dmap && npm i",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "better-sqlite3": "^7.5.3",
     "commander": "^9.3.0",
     "jams.js": "^0.0.7",
     "node-fetch": "^3.2.4"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0"
+  },
+  "jest": {
+    "transform": {}
   }
 }
