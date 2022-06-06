@@ -7,7 +7,8 @@
     "download-submodules": "git submodule update --init --recursive --remote",
     "install-submodules": "npm run init:dmap",
     "init:dmap": "cd lib/dmap && npm i",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js ./test/mocked",
+    "test-integration": "node --experimental-vm-modules node_modules/jest/bin/jest.js ./test/integration"
   },
   "dependencies": {
     "better-sqlite3": "^7.5.3",

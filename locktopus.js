@@ -20,7 +20,7 @@ locktopus.set_config = (new_config) => {
 
 locktopus.init_db = (dir) => {
     if (!existsSync(dir)) mkdirSync(dir)
-    db = new Database(`${dir}/locktopus.sqlite`, { verbose: console.log })
+    db = new Database(`${dir}/locktopus.sqlite`)
     const create = db.prepare("CREATE TABLE IF NOT EXISTS locks(" +
         "'when' INTEGER, 'slot' TEXT PRIMARY KEY, 'zone' TEXT, 'name' TEXT, 'meta' TEXT, 'data' TEXT )")
     create.run();
@@ -39,6 +39,7 @@ locktopus.look = async (path) => {
     let [meta, data] = trace.slice(-1)[0]
     if (lots.some(s => s[save_idx] === true)) await locktopus.save(trace, path)
     console.log(`meta: ${meta}\ndata: ${data}`)
+    return {meta, data}
 }
 
 locktopus.monk_get = async (db, orig, dmap, slot) => {

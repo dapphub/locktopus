@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals'
-import { rpc } from "../rpc"
-import { dummy_url } from './test-constants'
+import { rpc } from "../../rpc.js"
+import { dummy_url } from './test-constants.js'
 
 beforeEach(() => {
     jest.clearAllMocks()

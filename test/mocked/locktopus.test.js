@@ -1,8 +1,8 @@
 import { jest } from '@jest/globals'
-import { locktopus } from '../locktopus.js'
+import { locktopus } from '../../locktopus.js'
 import { dummy_url, dummy_trace, dummy_events } from './test-constants.js'
-import { rpc } from '../rpc.js'
-import lib from '../lib/dmap/dmap.js'
+import { rpc } from '../../rpc.js'
+import lib from '../../lib/dmap/dmap.js'
 import fs from 'fs'
 import Database from 'better-sqlite3/lib/database'
 
