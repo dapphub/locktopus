@@ -1,0 +1,4 @@
+{
+    eth_rpc no
+    finality 60
+}
