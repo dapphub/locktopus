@@ -35,7 +35,7 @@ locktopus.init_last = async () => {
 
 locktopus.look = async (path) => {
     const dmap = await rpc.getFacade(config.eth_rpc, db)
-    const trace = await lib.walk2(dmap, path);
+    const trace = await lib.walk2(dmap, path)
     let [meta, data] = trace.slice(-1)[0]
     if (lots.some(s => s[save_idx] === true)) await locktopus.save(trace, path)
     console.log(`meta: ${meta}\ndata: ${data}`)
