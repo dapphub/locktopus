@@ -2,9 +2,10 @@
 
 ## Core term
 
-`[ when zone name meta data ]`
+`[ when slot zone name meta data ]`
 
 - `when`: time entry was locked in the dmap (last event block time)
+- `slot`: the slot in dmap data is stored at
 - `zone`: dmap namezone
 - `name`: the key that was set
 - `meta`: the metadata, bit 0 is lock flag

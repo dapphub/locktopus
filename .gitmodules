@@ -1,0 +1,3 @@
+[submodule "lib/dmap"]
+	path = lib/dmap
+	url = https://github.com/dapphub/dmap.git
